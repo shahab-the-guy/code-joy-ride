@@ -1,4 +1,3 @@
-using System.Collections.Frozen;
 using System.Collections.Immutable;
 using Bogus;
 using CodeJoyRide.Api.Customers.Services.Abstractions;
@@ -25,8 +24,7 @@ public sealed class CustomerRepository : ICustomerRepository
     {
         var valueExists = Customers.TryGetValue(customerId, out var customer);
         if (!valueExists)
-            throw new CustomerNotFoundException(customerId);
-
+            return CodeJoyRide.Fx.Maybe.None;
         return Maybe.Some(customer!);
     }
 
@@ -37,8 +35,7 @@ public sealed class CustomerRepository : ICustomerRepository
             .FirstOrDefault(c => c.Email.IsSome && c.Email.UnwrappedValue == email);
 
         if (foundedCustomer is null)
-            throw new CustomerNotFoundException(email);
-        
+            return CodeJoyRide.Fx.Maybe.None;
         return Maybe.Some(foundedCustomer);
     }
 

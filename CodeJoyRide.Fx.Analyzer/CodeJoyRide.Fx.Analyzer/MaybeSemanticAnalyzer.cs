@@ -1,6 +1,8 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace CodeJoyRide.Fx.Analyzer;
 
@@ -31,7 +33,7 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
     private const string Category = "Usage";
 
     private static readonly DiagnosticDescriptor Rule = new(DiagnosticId, Title, MessageFormat, Category,
-        DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+        DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);
 
     // Keep in mind: you have to list your rules here.
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
@@ -46,6 +48,37 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
         context.EnableConcurrentExecution();
 
         // Subscribe to semantic (compile time) action invocation, e.g. throw .
-        // TODO: register operation action
+        context.RegisterOperationAction(AnalyzeThrowStatements, OperationKind.Throw);
+    }
+
+    private void AnalyzeThrowStatements(OperationAnalysisContext context)
+    {
+        if (context.Operation is not IThrowOperation || context.Operation.Syntax is not ThrowStatementSyntax)
+            return;
+
+        if (context.Operation.SemanticModel is null)
+            return;
+
+        var containingMethodSyntax = GetContainingMethodSyntax(context.Operation.Syntax);
+        var containingMethodSymbol =
+            context.Operation.SemanticModel.GetDeclaredSymbol(containingMethodSyntax) as IMethodSymbol;
+
+        var returnTypeSymbol = containingMethodSymbol!.ReturnType;
+        var maybeTypeSymbol = context.Compilation.GetTypeByMetadataName("CodeJoyRide.Fx.Maybe`1");
+
+        if (!returnTypeSymbol.OriginalDefinition.Equals(maybeTypeSymbol, SymbolEqualityComparer.Default))
+            return;
+
+        var diagnostic = Diagnostic.Create(Rule, context.Operation.Syntax.GetLocation());
+        context.ReportDiagnostic(diagnostic);
+    }
+
+    private MethodDeclarationSyntax GetContainingMethodSyntax(SyntaxNode syntax)
+    {
+        while (true)
+        {
+            if (syntax.Parent is MethodDeclarationSyntax mds) return mds;
+            syntax = syntax.Parent!;
+        }
     }
 }

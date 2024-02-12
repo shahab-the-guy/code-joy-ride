@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -9,6 +8,8 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace CodeJoyRide.Fx.Analyzer;
 
@@ -45,16 +46,37 @@ public class MaybeCodeFixProvider : CodeFixProvider
             return;
 
         // Register a code action that will invoke the fix.
-        context.RegisterCodeFix(CodeAction.Create(
-            title: string.Format(Resources.CJR001CodeFixTitle, "throw", "Maybe.None"),
-            token => ReplaceThrowWitMaybe(context.Document, throwStatementSyntax, token),
-            equivalenceKey: nameof(Resources.CJR001CodeFixTitle)
-        ), diagnostic);
+        context.RegisterCodeFix(
+            CodeAction.Create(
+                title: string.Format(Resources.CJR001CodeFixTitle, "Maybe.None", "throw"),
+                token => ReplaceThrowWithReturnStatement(context.Document, throwStatementSyntax, token),
+                equivalenceKey: nameof(Resources.CJR001CodeFixTitle)),
+            diagnostic
+        );
     }
 
-    private Task<Document> ReplaceThrowWitMaybe(Document document, CSharpSyntaxNode throwStatementSyntax,
-        CancellationToken token)
+    private static async Task<Document> ReplaceThrowWithReturnStatement(
+        Document document, CSharpSyntaxNode throwSyntaxNode, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var returnStatement = ReturnStatement(
+            MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                MemberAccessExpression(
+                    SyntaxKind.SimpleMemberAccessExpression,
+                    MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        IdentifierName("CodeJoyRide"),
+                        IdentifierName("Fx")),
+                    IdentifierName("Maybe")),
+                IdentifierName("None")
+                    .WithLeadingTrivia(throwSyntaxNode.GetLeadingTrivia())
+                    .WithTrailingTrivia(throwSyntaxNode.GetTrailingTrivia())
+                    .NormalizeWhitespace()));
+
+        var root = await document.GetSyntaxRootAsync(cancellationToken);
+        var newRoot = root?.ReplaceNode(throwSyntaxNode, returnStatement);
+
+        var formattedRoot = Formatter.Format(newRoot!, Formatter.Annotation, document.Project.Solution.Workspace);
+        return document.WithSyntaxRoot(formattedRoot);
     }
 }
