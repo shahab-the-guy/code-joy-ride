@@ -47,12 +47,12 @@ public class MaybeCodeFixProvider : CodeFixProvider
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(CodeAction.Create(
             title: string.Format(Resources.CJR001CodeFixTitle, "throw", "Maybe.None"),
-            token => ReplaceThrowWitMaybe(context.Document, throwStatementSyntax, token),
+            token => ReplaceThrowWithReturnStatement(context.Document, throwStatementSyntax, token),
             equivalenceKey: nameof(Resources.CJR001CodeFixTitle)
         ), diagnostic);
     }
 
-    private Task<Document> ReplaceThrowWitMaybe(Document document, CSharpSyntaxNode throwStatementSyntax,
+    private Task<Document> ReplaceThrowWithReturnStatement(Document document, CSharpSyntaxNode throwSyntaxNode,
         CancellationToken token)
     {
         throw new NotImplementedException();
