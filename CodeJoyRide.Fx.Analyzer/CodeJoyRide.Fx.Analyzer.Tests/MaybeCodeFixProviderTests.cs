@@ -21,7 +21,7 @@ public class MaybeCodeFixProviderTests
                               {
                                   public Maybe<int> GetValue(string number)
                                   {
-                                     throw new InvalidOperationException("Could not parse the number");
+                                      throw new InvalidOperationException("Could not parse the number");
                                   }
                               }
                               """;
@@ -40,7 +40,7 @@ public class MaybeCodeFixProviderTests
                                  """;
 
         var expected = Verifier.Diagnostic()
-            .WithLocation(8, 8)
+            .WithLocation(8, 9)
             .WithMessage("Use Maybe.None instead of throw exception");
 
         var codeFixTester = CSharpAnalyzerTestHelper
