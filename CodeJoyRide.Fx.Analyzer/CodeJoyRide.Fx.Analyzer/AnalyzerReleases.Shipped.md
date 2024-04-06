@@ -4,4 +4,4 @@
 
 | Rule ID | Category | Severity | Notes                                            |
 |---------|----------|----------|--------------------------------------------------|
-| AB0002  | Usage    | Warning  | The speed must be lower than the Speed of Light. |
+| CJR001  | Usage    | Warning  | The speed must be lower than the Speed of Light. |
