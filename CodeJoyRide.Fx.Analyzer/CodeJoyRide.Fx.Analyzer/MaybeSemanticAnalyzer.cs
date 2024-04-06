@@ -31,7 +31,9 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
     private const string Category = "Usage";
 
     private static readonly DiagnosticDescriptor Rule = new(DiagnosticId, Title, MessageFormat, Category,
-        DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+        DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description
+        , customTags: [WellKnownDiagnosticTags.NotConfigurable]
+        );
 
     // Keep in mind: you have to list your rules here.
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
@@ -43,7 +45,7 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
         // You must call this method to enable the Concurrent Execution.
-        context.EnableConcurrentExecution();
+        context.EnableConcurrentExecution(); 
 
         // Subscribe to semantic (compile time) action invocation, e.g. throw .
         // TODO: register operation action
