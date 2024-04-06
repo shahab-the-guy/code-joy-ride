@@ -69,7 +69,7 @@ public readonly struct Maybe<T> : IEquatable<None>, IEquatable<Maybe<T>>
             yield return this._value;
     }
 
-    public T Unwrap(T defaultValue = default) => this.IsNone ? defaultValue : this._value;
+    public T Unwrap(T defaultValue) => this.IsNone ? defaultValue : this._value;
     public T Unwrap(Func<T> defaultValueFunc) => this.IsNone ? defaultValueFunc() : this._value;
 
     public Task<T> UnwrapAsync(Func<Task<T>> defaultValueFuncAsync)
@@ -83,7 +83,7 @@ public readonly struct Maybe<T> : IEquatable<None>, IEquatable<Maybe<T>>
     public bool Equals(Maybe<T> other)
         => IsSome == other.IsSome && (IsNone || this._value!.Equals(other._value));
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return obj is Maybe<T> other && Equals(other);
     }
@@ -92,7 +92,7 @@ public readonly struct Maybe<T> : IEquatable<None>, IEquatable<Maybe<T>>
     {
         unchecked
         {
-            return (IsSome.GetHashCode() * 397) ^ EqualityComparer<T>.Default.GetHashCode(_value);
+            return (IsSome.GetHashCode() * 397) ^ EqualityComparer<T>.Default.GetHashCode(_value!);
         }
     }
 
