@@ -1,0 +1,33 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      *
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x' # You can specify the version you need
+
+    - name: Restore Dependencies
+      run: dotnet restore CodeJoyRide.sln
+
+    - name: Build Solution
+      run: dotnet build CodeJoyRide.sln --configuration Release
+
+    - name: Run Tests
+      run: dotnet test CodeJoyRide.sln --configuration Release --no-restore --verbosity normal

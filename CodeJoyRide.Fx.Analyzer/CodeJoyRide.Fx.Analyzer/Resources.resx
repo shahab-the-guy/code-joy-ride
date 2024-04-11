@@ -18,16 +18,16 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="CJR001CodeFixTitle" xml:space="preserve">
+    <data name="CJR01CodeFixTitle" xml:space="preserve">
         <value>Replace '{0}' with '{1}'</value><comment>The title of the code fix.</comment>
     </data>
-    <data name="CJR001Description" xml:space="preserve">
+    <data name="CJR01Description" xml:space="preserve">
         <value>It's recommended to return None instead of throw exception.</value><comment>An optional longer localizable description of the diagnostic.</comment>
     </data>
-    <data name="CJR001MessageFormat" xml:space="preserve">
+    <data name="CJR01MessageFormat" xml:space="preserve">
         <value>Use Maybe.None instead of throw exception</value><comment>The format-able message the diagnostic displays.</comment>
     </data>
-    <data name="CJR001Title" xml:space="preserve">
+    <data name="CJR01Title" xml:space="preserve">
         <value>No Throw Exception</value><comment>The title of the diagnostic.</comment>
     </data>
 </root>
