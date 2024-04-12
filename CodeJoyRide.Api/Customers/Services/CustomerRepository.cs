@@ -36,7 +36,7 @@ public sealed class CustomerRepository : ICustomerRepository
             .FirstOrDefault(c => c.Email.IsSome && c.Email.UnwrappedValue == email);
 
         if (foundedCustomer is null)
-            throw new CustomerNotFoundException(email);
+            return CodeJoyRide.Fx.Maybe.None;
         
         return Maybe.Some(foundedCustomer);
     }
