@@ -57,9 +57,6 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
 
     private void AnalyzeThrowStatements(OperationAnalysisContext context)
     {
-        if (context.Operation is not IThrowOperation || context.Operation.Syntax is not ThrowStatementSyntax)
-            return;
-
         if (context.Operation.SemanticModel is null)
             return;
 

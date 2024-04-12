@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace CodeJoyRide.Fx.Analyzer;
 
@@ -52,9 +53,27 @@ public class MaybeCodeFixProvider : CodeFixProvider
         ), diagnostic);
     }
 
-    private Task<Document> ReplaceThrowWithReturnStatement(
+    private async Task<Document> ReplaceThrowWithReturnStatement(
         Document document, CSharpSyntaxNode throwSyntaxNode, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var returnStatement = ReturnStatement(
+                MemberAccessExpression(
+                    SyntaxKind.SimpleMemberAccessExpression,
+                    MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            IdentifierName("CodeJoyRide"),
+                            IdentifierName("Fx")),
+                        IdentifierName("Maybe")),
+                    IdentifierName("None")))
+            .NormalizeWhitespace()
+            .WithLeadingTrivia(throwSyntaxNode.GetLeadingTrivia())
+            .WithTrailingTrivia(throwSyntaxNode.GetTrailingTrivia());
+
+        var currentRoot = await document.GetSyntaxRootAsync(token);
+        var newRoot = currentRoot!.ReplaceNode(throwSyntaxNode, returnStatement);
+
+        return document.WithSyntaxRoot(newRoot);
     }
 }

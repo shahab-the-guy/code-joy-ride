@@ -2,6 +2,7 @@
 
 ### New Rules
 
-| Rule ID | Category | Severity | Notes                                            |
-|---------|----------|----------|--------------------------------------------------|
-| CJR01   | Usage    | Warning  | The speed must be lower than the Speed of Light. |
+
+Rule ID | Category | Severity | Notes
+--------|----------|----------|--------------------
+CJR01   | Usage    | Error    | CJR_01_The speed must be lower than the Speed of Light [Documentation](../../README.md)

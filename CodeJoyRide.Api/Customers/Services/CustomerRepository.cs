@@ -24,7 +24,7 @@ public sealed class CustomerRepository : ICustomerRepository
     {
         var valueExists = Customers.TryGetValue(customerId, out var customer);
         if (!valueExists)
-            throw new CustomerNotFoundException(customerId);
+            return CodeJoyRide.Fx.Maybe.None;
 
         return Maybe.Some(customer!);
     }
