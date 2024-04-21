@@ -33,7 +33,9 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
     private const string Category = "Usage";
 
     private static readonly DiagnosticDescriptor Rule = new(DiagnosticId, Title, MessageFormat, Category,
-        DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);
+        DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description
+        , customTags: [WellKnownDiagnosticTags.NotConfigurable]
+    );
 
     // Keep in mind: you have to list your rules here.
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =

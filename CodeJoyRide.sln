@@ -17,6 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D3C4A25F-0
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A6A1F426-676D-4413-93B2-B9DD6A25736A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F37F6912-F8AE-4B03-8EB0-966358BC757B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build_and_test.yaml = .github\workflows\build_and_test.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,5 +52,6 @@ Global
 		{3D0FED8B-0509-4407-B66C-AFC7971956C3} = {1B62324C-07F0-45FA-A1F5-C5CAD91A6AC5}
 		{906D80E7-ED31-4D3E-A47D-7ABF8F6153FB} = {1B62324C-07F0-45FA-A1F5-C5CAD91A6AC5}
 		{5508C6E9-856E-4B08-8BFD-D05803BAE144} = {85459589-7B8D-43F5-977D-64D13E685F71}
+		{F37F6912-F8AE-4B03-8EB0-966358BC757B} = {A6A1F426-676D-4413-93B2-B9DD6A25736A}
 	EndGlobalSection
 EndGlobal
