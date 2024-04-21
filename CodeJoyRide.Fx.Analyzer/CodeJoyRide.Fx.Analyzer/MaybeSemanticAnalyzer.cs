@@ -16,19 +16,19 @@ namespace CodeJoyRide.Fx.Analyzer;
 public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
 {
     // Preferred format of DiagnosticId is Your Prefix + Number, e.g. CA1234.
-    public const string DiagnosticId = "CJR01";
+    public const string DiagnosticId = "CJR001";
 
     // Feel free to use raw strings if you don't need localization.
-    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.CJR01Title),
+    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.CJR001Title),
         Resources.ResourceManager, typeof(Resources));
 
     // The message that will be displayed to the user.
     private static readonly LocalizableString MessageFormat =
-        new LocalizableResourceString(nameof(Resources.CJR01MessageFormat), Resources.ResourceManager,
+        new LocalizableResourceString(nameof(Resources.CJR001MessageFormat), Resources.ResourceManager,
             typeof(Resources));
 
     private static readonly LocalizableString Description =
-        new LocalizableResourceString(nameof(Resources.CJR01Description), Resources.ResourceManager,
+        new LocalizableResourceString(nameof(Resources.CJR001Description), Resources.ResourceManager,
             typeof(Resources));
 
     // The category of the diagnostic (Design, Naming etc.).
@@ -57,32 +57,6 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
 
     private void AnalyzeThrowStatements(OperationAnalysisContext context)
     {
-        if (context.Operation is not IThrowOperation || context.Operation.Syntax is not ThrowStatementSyntax)
-            return;
-
-        if (context.Operation.SemanticModel is null)
-            return;
-
-        var containingMethodSyntax = GetContainingMethodSyntax(context.Operation.Syntax);
-        var containingMethodSymbol =
-            context.Operation.SemanticModel.GetDeclaredSymbol(containingMethodSyntax) as IMethodSymbol;
-
-        var returnTypeSymbol = containingMethodSymbol!.ReturnType;
-        var maybeTypeSymbol = context.Compilation.GetTypeByMetadataName("CodeJoyRide.Fx.Maybe`1");
-
-        if (!returnTypeSymbol.OriginalDefinition.Equals(maybeTypeSymbol, SymbolEqualityComparer.Default))
-            return;
-
-        var diagnostic = Diagnostic.Create(Rule, context.Operation.Syntax.GetLocation());
-        context.ReportDiagnostic(diagnostic);
-    }
-
-    private MethodDeclarationSyntax GetContainingMethodSyntax(SyntaxNode syntaxNode)
-    {
-        while (true)
-        {
-            if (syntaxNode.Parent is MethodDeclarationSyntax mds) return mds;
-            syntaxNode = syntaxNode.Parent!;
-        }
+        // TODO: Implement the Analyzer
     }
 }

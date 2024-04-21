@@ -46,9 +46,9 @@ public class MaybeCodeFixProvider : CodeFixProvider
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(CodeAction.Create(
-            title: string.Format(Resources.CJR01CodeFixTitle, "throw", "Maybe.None"),
+            title: string.Format(Resources.CJR001CodeFixTitle, "throw", "Maybe.None"),
             token => ReplaceThrowWithReturnStatement(context.Document, throwStatementSyntax, token),
-            equivalenceKey: nameof(Resources.CJR01CodeFixTitle)
+            equivalenceKey: nameof(Resources.CJR001CodeFixTitle)
         ), diagnostic);
     }
 
