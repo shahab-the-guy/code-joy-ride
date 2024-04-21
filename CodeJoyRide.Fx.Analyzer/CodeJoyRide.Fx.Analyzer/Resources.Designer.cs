@@ -45,27 +45,27 @@ namespace CodeJoyRide.Fx.Analyzer {
             }
         }
         
-        internal static string CJR001CodeFixTitle {
+        internal static string CJR01CodeFixTitle {
             get {
-                return ResourceManager.GetString("CJR001CodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("CJR01CodeFixTitle", resourceCulture);
             }
         }
         
-        internal static string CJR001Description {
+        internal static string CJR01Description {
             get {
-                return ResourceManager.GetString("CJR001Description", resourceCulture);
+                return ResourceManager.GetString("CJR01Description", resourceCulture);
             }
         }
         
-        internal static string CJR001MessageFormat {
+        internal static string CJR01MessageFormat {
             get {
-                return ResourceManager.GetString("CJR001MessageFormat", resourceCulture);
+                return ResourceManager.GetString("CJR01MessageFormat", resourceCulture);
             }
         }
         
-        internal static string CJR001Title {
+        internal static string CJR01Title {
             get {
-                return ResourceManager.GetString("CJR001Title", resourceCulture);
+                return ResourceManager.GetString("CJR01Title", resourceCulture);
             }
         }
     }
