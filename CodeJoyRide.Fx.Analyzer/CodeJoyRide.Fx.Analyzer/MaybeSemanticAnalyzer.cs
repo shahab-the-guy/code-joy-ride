@@ -57,6 +57,29 @@ public class MaybeSemanticAnalyzer : DiagnosticAnalyzer
 
     private void AnalyzeThrowStatements(OperationAnalysisContext context)
     {
-        // TODO: Implement the Analyzer
+        if (context.Operation is not IThrowOperation || context.Operation.Syntax is not ThrowStatementSyntax)
+            return;
+        
+        var containingMethodSyntax = GetContainingMethodSyntax(context.Operation.Syntax);
+        var containingMethodSymbol =
+            context.Operation.SemanticModel.GetDeclaredSymbol(containingMethodSyntax) as IMethodSymbol;
+
+        var returnSymbol = containingMethodSymbol!.ReturnType;
+        var maybeTypeSymbol = context.Compilation.GetTypeByMetadataName("CodeJoyRide.Fx.Maybe`1");
+
+        if(!returnSymbol.OriginalDefinition.Equals(maybeTypeSymbol, SymbolEqualityComparer.Default))
+            return;
+
+        var diagnostic = Diagnostic.Create(Rule, context.Operation.Syntax.GetLocation());
+        context.ReportDiagnostic(diagnostic);
+    }
+
+    private MethodDeclarationSyntax GetContainingMethodSyntax(SyntaxNode operationSyntax)
+    {
+        while (true)
+        {
+            if (operationSyntax.Parent is MethodDeclarationSyntax mds) return mds;
+            operationSyntax = operationSyntax.Parent!;
+        }
     }
 }
